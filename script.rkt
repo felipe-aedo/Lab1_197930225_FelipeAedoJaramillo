@@ -1,6 +1,6 @@
 #lang scheme
 
-(require "TDA_tablero.rkt" "TDA_carta.rkt" "TDA_player.rkt" "TDA_propiedad.rkt")
+(require "TDA_tablero.rkt" "TDA_carta.rkt" "TDA_player.rkt" "TDA_propiedad.rkt" "TDA_juego.rkt")
 
 ; 1. Creación de jugadores
 (define p1 (player 1 "Carlos" 1500 '() 0 #f 0))
@@ -26,10 +26,26 @@
 ; 4. Creación del tablero inicial
 (define empty-board (tablero '() '() '() '()))
 
-; 5. Agregar propiedades al tablero
+; 5. Agregar propiedades y cartas al tablero
 (define board1 (tablero-agregar-propiedad empty-board prop1 1))
 (define board2 (tablero-agregar-propiedad board1 prop2 3))
 (define board3 (tablero-agregar-propiedad board2 prop3 6))
 (define board4 (tablero-agregar-propiedad board3 prop4 8))
 (define board5 (tablero-agregar-propiedad board4 prop5 9))
 (define board6 (tablero-agregar-propiedad board5 prop6 11))
+;cartasSuerte
+(define board7 (tablero-agregar-cartaSuerte board6 chance1))
+(define board8 (tablero-agregar-cartaSuerte board7 chance2))
+(define board9 (tablero-agregar-cartaSuerte board8 chance3))
+;cartasComunidad
+(define board10 (tablero-agregar-cartaComunidad board9 community1))
+(define board11 (tablero-agregar-cartaComunidad board10 community2))
+(define board12 (tablero-agregar-cartaComunidad board11 community3))
+
+; 6. Creación de un nuevo juego
+(define g0 (juego '() board12 20000 2 0 10 4 1 "preparation"))
+
+; 7. Agregar jugadores al juego
+(define g1 (juego-agregar-jugador g0 p1))
+(define g2 (juego-agregar-jugador g1 p2))
+(define g3 (juego-agregar-jugador g2 p3))

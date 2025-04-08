@@ -1,6 +1,7 @@
 #lang scheme
 
-(provide propiedad propiedad-set-dueño)
+(require "TDA_player.rkt")
+(provide propiedad propiedad? propiedad-set-dueño)
 
 ;------CONSTRUCTOR--------
 ; Descripción: Constructor TDA propiedad
@@ -9,6 +10,27 @@
 ; Tipo de recursión: no aplica
 (define (propiedad id nombre precio renta dueño casas esHotel estaHipotecada)
   (list id nombre precio renta dueño casas esHotel estaHipotecada)
+  )
+
+
+;-----PERTENENCIA-------
+; Descripción: Comprueba que pertenece al tda propiedad
+; Dom: Propiedad (list)
+; Rec: Bool
+; tipo de recursión: No aplica
+(define (propiedad? propiedad-x)
+  (if (list? propiedad-x)
+      (if (= 8 (length propiedad-x))
+          (if (and (integer? (list-ref propiedad-x 0)) (string? (list-ref propiedad-x 1)) (integer? (list-ref propiedad-x 2))
+                   (integer? (list-ref propiedad-x 3)) (or (null? (list-ref propiedad-x 4)) (player? (list-ref propiedad-x 4)))
+                   (integer? (list-ref propiedad-x 5)) (boolean? (list-ref propiedad-x 6)) (boolean? (list-ref propiedad-x 7)))
+              #t
+              #f
+              )
+          #f
+          )
+      #f
+      )
   )
 
 ;-------GETTERS--------
