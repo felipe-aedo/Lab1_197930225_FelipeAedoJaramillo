@@ -1,6 +1,7 @@
 #lang scheme
 
-(require "TDA_propiedad.rkt")
+(require "TDA_propiedad.rkt" "TDA_player.rkt" "TDA_carta.rkt")
+(provide tablero tablero-agregar-propiedad)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA tablero
@@ -13,23 +14,44 @@
 
 ;-----GETTERS------
 
-(define (tablero-get-propiedades tablero)
-  (car tablero)
+; Descripción: obtiene las propiedades del tablero
+; Dom: tablero
+; Rec: propiedades (list)
+; Tipo de recursión: No aplica
+(define (tablero-get-propiedades tablero-x)
+  (car tablero-x)
   )
 
-(define (tablero-get-cartasSuerte tablero)
-  (cadr tablero)
+; Descripción: obtiene las cartas suerte del tablero
+; Dom: tablero
+; Rec: cartas suerte (list)
+; Tipo de recursión: No aplica
+(define (tablero-get-cartasSuerte tablero-x)
+  (cadr tablero-x)
   )
 
-(define (tablero-get-cartasComunidad tablero)
-  (caddr tablero)
+; Descripción: obtiene las cartas comunidad del tablero
+; Dom: tablero
+; Rec: cartas comunidad (list)
+; Tipo de recursión: No aplica
+(define (tablero-get-cartasComunidad tablero-x)
+  (caddr tablero-x)
   )
 
-(define (tablero-get-casillasEspeciales)
-  (cadddr tablero)
+; Descripción: obtiene las casillas especiales del tablero
+; Dom: tablero
+; Rec: casillas especiales(list)
+; Tipo de recursión: No aplica
+(define (tablero-get-casillasEspeciales tablero-x)
+  (cadddr tablero-x)
   )
 
 ;-----SETTERS-----
-; Dom: tablero (tablero) X propiedades con posición (lista de pares (propiedad . posicion))
-(define (tablero-agregar-propiedad tablero propiedad)
+; Descripción: agrega una propiedad a la lista de propiedades del tablero
+; Dom: tablero (tablero) X propiedad X posicion
+; Rec: tablero
+; Tipo de recursión: no aplica
+(define (tablero-agregar-propiedad tablero-x propiedad-x posicion)
+  (tablero (cons (cons propiedad-x posicion) (tablero-get-propiedades tablero-x)) (tablero-get-cartasSuerte tablero-x)
+           (tablero-get-cartasComunidad tablero-x) (tablero-get-casillasEspeciales tablero-x))
   )

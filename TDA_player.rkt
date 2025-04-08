@@ -1,6 +1,7 @@
 #lang scheme
 
 (require "TDA_propiedad.rkt")
+(provide player)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA player

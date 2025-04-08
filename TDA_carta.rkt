@@ -1,5 +1,7 @@
 #lang scheme
 
+
+(provide carta)
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA carta
 ; Dom: id (int) X nombre (string) X descripcion (string) X accion (funcion)
