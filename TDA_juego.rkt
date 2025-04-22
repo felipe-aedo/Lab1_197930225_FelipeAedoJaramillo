@@ -1,7 +1,7 @@
 #lang scheme
 
 (require "TDA_player.rkt" "TDA_carta.rkt" "TDA_propiedad.rkt" "TDA_tablero.rkt")
-(provide juego juego-agregar-jugador)
+(provide juego juego? juego-agregar-jugador juego-obtener-jugador-actual juego-lanzar-dados)
 
 ;------CONSTRUCTOR--------
 ; Descripción: Constructor TDA juego
@@ -22,7 +22,7 @@
   (if (list? juego-x)
       (if (= 9 (length juego-x))
           (if (and (list? (list-ref juego-x 0))
-                   (andmap player? (list-ref juego-x 0)); jugadores
+                   (andmap jugador? (list-ref juego-x 0)); jugadores
                    (tablero? (list-ref juego-x 1))              ; tablero
                    (integer? (list-ref juego-x 2))              ; dineroBanco
                    (integer? (list-ref juego-x 3))
@@ -106,15 +106,36 @@
   (list-ref juego-x 8)
   )
 
+; Descripcion: obtiene jugador turno actual
+; Dominio: juego
+; Rec: player
+(define (juego-obtener-jugador-actual juego-x)
+  (car(filter
+   (lambda (jugador)
+     (= (player-get-id jugador) (juego-get-turnoActual juego-x))
+     )
+   (juego-get-jugadores juego-x)
+   )
+  )
+  )
 
+;------SETTERS------
 ; Descripción: Agrega un jugador a la lista de jugadores
 ; Dom: juego X jugador
 ; Rec: juego
 (define (juego-agregar-jugador juego-x jugador-x)
-  (if (and (player? jugador-x) (juego? juego-x))
+  (if (and (jugador? jugador-x) (juego? juego-x))
       (juego (cons jugador-x (juego-get-jugadores juego-x)) (juego-get-tablero juego-x) (juego-get-dineroBanco juego-x) (juego-get-numeroDados juego-x)
              (juego-get-turnoActual juego-x) (juego-get-tasaImpuesto juego-x) (juego-get-maximoCasas juego-x) (juego-get-maximoHoteles juego-x)
              (juego-get-estadoJuego juego-x))
       null
       )
+  )
+
+;Generador de dados
+; Dom : sin dominio
+; Rec : pair 
+(define juego-lanzar-dados(lambda ()
+  (cons (+ 1 (random 6)) (+ 1 (random 6)))
+  )
   )

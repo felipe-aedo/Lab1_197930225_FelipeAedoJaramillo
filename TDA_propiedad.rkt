@@ -1,11 +1,10 @@
 #lang scheme
 
-(require "TDA_player.rkt")
-(provide propiedad propiedad? propiedad-set-dueño)
+(provide propiedad propiedad? propiedad-set-dueño propiedad-get-precio propiedad-set-dueño)
 
 ;------CONSTRUCTOR--------
 ; Descripción: Constructor TDA propiedad
-; Dom: id (int) X nombre (string) X precio (int) X renta (int) X dueño (jugador/null) X casas (int) X esHotel (boolean) X estaHipotecada (boolean)
+; Dom: id (int) X nombre (string) X precio (int) X renta (int) X dueño (Idjugador/null) X casas (int) X esHotel (boolean) X estaHipotecada (boolean)
 ; Rec: propiedad
 ; Tipo de recursión: no aplica
 (define (propiedad id nombre precio renta dueño casas esHotel estaHipotecada)
@@ -18,12 +17,12 @@
 ; Dom: Propiedad (list)
 ; Rec: Bool
 ; tipo de recursión: No aplica
-(define (propiedad? propiedad-x)
-  (if (list? propiedad-x)
-      (if (= 8 (length propiedad-x))
-          (if (and (integer? (list-ref propiedad-x 0)) (string? (list-ref propiedad-x 1)) (integer? (list-ref propiedad-x 2))
-                   (integer? (list-ref propiedad-x 3)) (or (null? (list-ref propiedad-x 4)) (player? (list-ref propiedad-x 4)))
-                   (integer? (list-ref propiedad-x 5)) (boolean? (list-ref propiedad-x 6)) (boolean? (list-ref propiedad-x 7)))
+(define (propiedad? prop)
+  (if (list? prop)
+      (if (= 8 (length prop))
+          (if (and (integer? (list-ref prop 0)) (string? (list-ref prop 1)) (integer? (list-ref prop 2))
+                   (integer? (list-ref prop 3)) (or (null? (list-ref prop 4)) (integer? (list-ref prop 4))) (integer? (list-ref prop 5))
+                   (boolean? (list-ref prop 6)) (boolean? (list-ref prop 7)))
               #t
               #f
               )
@@ -38,69 +37,69 @@
 ; Dom: propiedad
 ; Rec: id (int)
 ; Tipo de recursión: no aplica
-(define (propiedad-get-id propiedad-x)
-  (list-ref propiedad-x 0)
+(define (propiedad-get-id prop)
+  (list-ref prop 0)
   )
 
 ; Descripción: Obtiene el nombre da la propiedad
 ; Dom: propiedad
 ; Rec: nombre (string)
 ; Tipo de recursión: no aplica
-(define (propiedad-get-nombre propiedad-x)
-  (list-ref propiedad-x 1)
+(define (propiedad-get-nombre prop)
+  (list-ref prop 1)
   )
 
 ; Descripción: Obtiene el precio de la propiedad
 ; Dom: propiedad
 ; Rec: precio (int)
 ; Tipo de recursión: no aplica
-(define (propiedad-get-precio propiedad-x)
-  (list-ref propiedad-x 2)
+(define (propiedad-get-precio prop)
+  (list-ref prop 2)
   )
 
 ; Descripción: Obtiene la renta de la propiedad
 ; Dom: propiedad
 ; Rec: renta (int)
 ; Tipo de recursión: no aplica
-(define (propiedad-get-renta propiedad-x)
-  (list-ref propiedad-x 3)
+(define (propiedad-get-renta prop)
+  (list-ref prop 3)
   )
 
 ; Descripción: Obtiene el dueño de la propiedad
 ; Dom: propiedad
 ; Rec: dueño (o null)
 ; Tipo de recursión: no aplica
-(define (propiedad-get-dueño propiedad-x)
-  (list-ref propiedad-x 4)
+(define (propiedad-get-dueño prop)
+  (list-ref prop 4)
   )
 
 ; Descripción: Obtiene el numero de casas en la propiedad
 ; Dom: propiedad
 ; Rec: casas (int)
 ; Tipo de recursión: no aplica
-(define (propiedad-get-casas propiedad-x)
-  (list-ref propiedad-x 5)
+(define (propiedad-get-casas prop)
+  (list-ref prop 5)
   )
 
 ; Descripción: Comprueba si es hotel
 ; Dom: propiedad
 ; Rec: bool
 ; Tipo de recursión: no aplica
-(define (propiedad-esHotel propiedad-x)
-  (list-ref propiedad-x 6)
+(define (propiedad-esHotel prop)
+  (list-ref prop 6)
   )
 
 ; Descripción: Comprueba si esta hipotecada la propiedad
 ; Dom: propiedad
 ; Rec: bool
 ; Tipo de recursión: no aplica
-(define (propiedad-estaHipotecada propiedad-x)
-  (list-ref propiedad-x 7)
+(define (propiedad-estaHipotecada prop)
+  (list-ref prop 7)
   )
 
 ;--------SETTERS------
 ; Descripción: Establece el dueño de una propiedad
-; Dom: propiedad X dueño
+; Dom: propiedad(propiedad) X idDueño(int)
 ; Rec: propiedad
 ; Tipo de recursión: no aplica
 (define (propiedad-set-dueño propiedad-x dueño)

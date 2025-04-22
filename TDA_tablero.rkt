@@ -18,17 +18,17 @@
 ; Dom: tablero (list)
 ; Rec: Bool
 ; Tipo de recursión: No aplica
-(define (tablero? tablero-x)
-  (and (list? tablero-x)
-       (= 4 (length tablero-x))
-       (list? (list-ref tablero-x 0)) ; propiedades
-       (list? (list-ref tablero-x 1)) ; cartas-suerte
-       (list? (list-ref tablero-x 2)) ; cartas-comunidad
-       (list? (list-ref tablero-x 3)) ; casillas-especiales
-       (and (andmap pair? (list-ref tablero-x 0)) (andmap propiedad? (map car (list-ref tablero-x 0))))
-       (andmap carta? (list-ref tablero-x 1))
-       (andmap carta? (list-ref tablero-x 2))
-       (andmap integer? (list-ref tablero-x 3))
+(define (tablero? tab)
+  (and (list? tab)
+       (= 4 (length tab))
+       (list? (list-ref tab 0)) ; propiedades
+       (list? (list-ref tab 1)) ; cartas-suerte
+       (list? (list-ref tab 2)) ; cartas-comunidad
+       (list? (list-ref tab 3)) ; casillas-especiales
+       (andmap pair? (list-ref tab 0))
+       (andmap carta? (list-ref tab 1))
+       (andmap carta? (list-ref tab 2))
+       ;(andmap integer? (list-ref tab 3))
        )
   )
 
@@ -68,28 +68,27 @@
 
 ;-----SETTERS-----
 ; Descripción: agrega una propiedad a la lista de propiedades del tablero
-; Dom: tablero (tablero) X propiedad X posicion
+; Dom: tablero (tablero) X lista de pares (propiedad , posicion)
 ; Rec: tablero
 ; Tipo de recursión: no aplica
-(define (tablero-agregar-propiedad tablero-x propiedad-x posicion)
-  (tablero (cons (cons propiedad-x posicion) (tablero-get-propiedades tablero-x)) (tablero-get-cartasSuerte tablero-x)
-           (tablero-get-cartasComunidad tablero-x) (tablero-get-casillasEspeciales tablero-x))
+(define (tablero-agregar-propiedad tab propiedades)
+  (tablero propiedades (tablero-get-cartasSuerte tab) (tablero-get-cartasComunidad tab) (tablero-get-casillasEspeciales tab))
   )
 
 ; Descripción: agrega una carta a la lista de cartasSuerte
-; Dom: tablero (tablero) X carta
+; Dom: tablero (tablero) X listaCartas (list)
 ; Rec: tablero
 ; Tipo de recursión: no aplica
-(define (tablero-agregar-cartaSuerte tablero-x cartaSuerte)
-  (tablero (tablero-get-propiedades tablero-x) (cons cartaSuerte(tablero-get-cartasSuerte tablero-x))
-           (tablero-get-cartasComunidad tablero-x) (tablero-get-casillasEspeciales tablero-x))
+(define (tablero-agregar-cartaSuerte tab listaSuerte)
+  (tablero (tablero-get-propiedades tab) listaSuerte
+           (tablero-get-cartasComunidad tab) (tablero-get-casillasEspeciales tab))
   )
 
 ; Descripción: agrega una carta a la lista de cartasComunidad
-; Dom: tablero (tablero) X carta
+; Dom: tablero (tablero) X listaCartas (list)
 ; Rec: tablero
 ; Tipo de recursión: no aplica
-(define (tablero-agregar-cartaComunidad tablero-x cartaComunidad)
-  (tablero (tablero-get-propiedades tablero-x) (tablero-get-cartasSuerte tablero-x)
-           (cons cartaComunidad (tablero-get-cartasComunidad tablero-x)) (tablero-get-casillasEspeciales tablero-x))
+(define (tablero-agregar-cartaComunidad tab listaComunidad)
+  (tablero (tablero-get-propiedades tab) (tablero-get-cartasSuerte tab)
+           listaComunidad (tablero-get-casillasEspeciales tab))
   )

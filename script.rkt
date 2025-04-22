@@ -3,9 +3,9 @@
 (require "TDA_tablero.rkt" "TDA_carta.rkt" "TDA_player.rkt" "TDA_propiedad.rkt" "TDA_juego.rkt")
 
 ; 1. Creación de jugadores
-(define p1 (player 1 "Carlos" 1500 '() 0 #f 0))
-(define p2 (player 2 "Ana" 1500 '() 0 #f 0))
-(define p3 (player 3 "Luis" 1500 '() 0 #f 0))
+(define p1 (jugador 1 "Carlos" 1500 '() 0 #f 0))
+(define p2 (jugador 2 "Ana" 1500 '() 0 #f 0))
+(define p3 (jugador 3 "Luis" 1500 '() 0 #f 0))
 
 ; 2. Creación de propiedades para el juego
 (define prop1 (propiedad 1 "Paseo Mediterráneo" 60 12 null 0 #f #f))
@@ -14,38 +14,39 @@
 (define prop4 (propiedad 4 "Avenida Vermont" 100 35 null 0 #f #f))
 (define prop5 (propiedad 5 "Avenida Connecticut" 120 38 null 0 #f #f))
 (define prop6 (propiedad 6 "Plaza San Carlos" 140 40 null 0 #f #f))
+(define prop7 (propiedad 7 "Avenida St. James" 180 14 #f 0 #f #f))
+(define prop8 (propiedad 8 "Avenida Tennessee" 180 14 #f 0 #f #f))
+
+(define lista-propiedades (list (cons prop1 1) (cons prop2 3) (cons prop3 6) (cons prop4 8) (cons prop5 9) (cons prop6 11) (cons prop7 13) (cons prop8 14)))
 
 ; 3. Creación de cartas de suerte y arca comunal
 (define chance1 (carta 1 "suerte" "Avance hasta la casilla de salida" 'go-to-start))
 (define chance2 (carta 2 "suerte" "Vaya a la cárcel" 'go-to-jail))
 (define chance3 (carta 3 "suerte" "El banco le paga $50" 'bank-pays))
+(define lista-suerte (list chance1 chance2 chance3))
+
 (define community1 (carta 4 "comunidad" "Pague impuestos por $100" 'pay-tax))
 (define community2 (carta 5 "comunidad" "Es su cumpleaños, reciba $10 de cada jugador" 'birthday))
 (define community3 (carta 6 "comunidad" "Salga de la cárcel gratis" 'get-out-of-jail))
+(define lista-comunidad (list community1 community2 community3))
 
 ; 4. Creación del tablero inicial
-(define empty-board (tablero '() '() '() '()))
+(define empty-board (tablero '() '() '() (list (cons 'salida 0) (cons 'carcel 10) (cons 'suerte 7) (cons 'comunidad 17))))
 
 ; 5. Agregar propiedades y cartas al tablero
-(define board1 (tablero-agregar-propiedad empty-board prop1 1))
-(define board2 (tablero-agregar-propiedad board1 prop2 3))
-(define board3 (tablero-agregar-propiedad board2 prop3 6))
-(define board4 (tablero-agregar-propiedad board3 prop4 8))
-(define board5 (tablero-agregar-propiedad board4 prop5 9))
-(define board6 (tablero-agregar-propiedad board5 prop6 11))
+
+(define board0 (tablero-agregar-propiedad empty-board lista-propiedades))
 ;cartasSuerte
-(define board7 (tablero-agregar-cartaSuerte board6 chance1))
-(define board8 (tablero-agregar-cartaSuerte board7 chance2))
-(define board9 (tablero-agregar-cartaSuerte board8 chance3))
+(define board1 (tablero-agregar-cartaSuerte board0 lista-suerte))
 ;cartasComunidad
-(define board10 (tablero-agregar-cartaComunidad board9 community1))
-(define board11 (tablero-agregar-cartaComunidad board10 community2))
-(define board12 (tablero-agregar-cartaComunidad board11 community3))
+(define board2 (tablero-agregar-cartaComunidad board1 lista-comunidad))
 
 ; 6. Creación de un nuevo juego
-(define g0 (juego '() board12 20000 2 0 10 4 1 "preparation"))
+(define g0 (juego '() board2 20000 2 1 10 4 1 "preparation"))
 
 ; 7. Agregar jugadores al juego
 (define g1 (juego-agregar-jugador g0 p1))
 (define g2 (juego-agregar-jugador g1 p2))
 (define g3 (juego-agregar-jugador g2 p3))
+
+(define ptest(player-comprar-propiedad p1 prop1))
