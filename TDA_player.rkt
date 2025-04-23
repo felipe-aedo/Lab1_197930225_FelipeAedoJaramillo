@@ -1,7 +1,7 @@
 #lang scheme
 
 (require "TDA_propiedad.rkt")
-(provide jugador jugador? player-get-id player-comprar-propiedad)
+(provide jugador jugador? player-get-id player-get-posicion player-get-dinero player-comprar-propiedad jugador-mover)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA player
@@ -22,7 +22,7 @@
   (if (list? player)
      (if (= (length player) 7)
          (if (and (integer? (list-ref player 0)) (string? (list-ref player 1)) (integer? (list-ref player 2))
-                  (list? (list-ref player 3)) (andmap (lambda (id) (integer? id)) (list-ref player 3)) (integer? (list-ref player 4)) (boolean? (list-ref player 5))
+                  (list? (list-ref player 3)) (andmap integer? (list-ref player 3)) (integer? (list-ref player 4)) (boolean? (list-ref player 5))
                   (integer? (list-ref player 6)))
              #t
              #f
@@ -131,6 +131,13 @@
       )
   )
 
+; Descripción: Mueve al jugador tras lanzar dados, retorna el player con posicion actualizada
+; Dom: jugador X par de dados X juego
+; Rec: jugador
+(define (jugador-mover player pair game)
+  (player-set-posicion player (+ (car pair) (cdr pair)))
+  )
+
 ; Descripción: Alterna el valor de verdad de EstaEnCarcel para el jugador
 ; Dom: player
 ; Rec: player (player)
@@ -162,8 +169,7 @@
 ; rec : player
 (define (player-comprar-propiedad player prop)
   (if (>= (player-get-dinero player) (propiedad-get-precio prop))
-      (player-agregar-propiedad (player-set-dinero player (- (player-get-dinero player) (propiedad-get-precio prop))) (propiedad-set-dueño prop player))
+      (player-agregar-propiedad (player-set-dinero player (- (player-get-dinero player) (propiedad-get-precio prop))) (propiedad-get-id prop))
       player
       )
   )
- 

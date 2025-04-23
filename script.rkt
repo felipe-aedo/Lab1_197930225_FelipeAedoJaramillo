@@ -30,10 +30,8 @@
 (define community3 (carta 6 "comunidad" "Salga de la cárcel gratis" 'get-out-of-jail))
 (define lista-comunidad (list community1 community2 community3))
 
-; 4. Creación del tablero inicial
+; 4. Creación del tablero
 (define empty-board (tablero '() '() '() (list (cons 'salida 0) (cons 'carcel 10) (cons 'suerte 7) (cons 'comunidad 17))))
-
-; 5. Agregar propiedades y cartas al tablero
 
 (define board0 (tablero-agregar-propiedad empty-board lista-propiedades))
 ;cartasSuerte
@@ -41,12 +39,34 @@
 ;cartasComunidad
 (define board2 (tablero-agregar-cartaComunidad board1 lista-comunidad))
 
-; 6. Creación de un nuevo juego
+; 5. Creación de un nuevo juego
 (define g0 (juego '() board2 20000 2 1 10 4 1 "preparation"))
 
-; 7. Agregar jugadores al juego
+; 6. Agregar jugadores al juego
 (define g1 (juego-agregar-jugador g0 p1))
 (define g2 (juego-agregar-jugador g1 p2))
 (define g3 (juego-agregar-jugador g2 p3))
 
-(define ptest(player-comprar-propiedad p1 prop1))
+; 7. Jugar
+(display "===== CAPITALIA =====\n\n")
+;actualizar estado
+(define g4(juego-set-estado g3 "playing"))
+
+; Turno 1: Carlos
+(display "TURNO 1: Carlos\n")
+
+(define semilla-1 12345)
+(define semilla-2 51234)
+(define dados-carlos (juego-lanzar-dados semilla-1 semilla-2))
+
+(define p1-movido (jugador-mover p1 dados-carlos g2))
+
+(define posicion-carlos (player-get-posicion p1-movido))
+(define prop-carlos (tablero-obtener-propiedad board2 posicion-carlos))
+
+(define p1-actualizado (player-comprar-propiedad p1-movido prop-carlos))
+(define prop-carlos-actualizada (propiedad-set-dueño prop-carlos 1))
+
+(define g5 (juego-actualizar-jugador g4 p1-actualizado))
+(define g6 (juego-actualizar-propiedad g5 prop-carlos-actualizada))
+

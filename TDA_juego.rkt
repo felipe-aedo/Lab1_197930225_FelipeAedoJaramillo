@@ -1,7 +1,7 @@
 #lang scheme
 
 (require "TDA_player.rkt" "TDA_carta.rkt" "TDA_propiedad.rkt" "TDA_tablero.rkt")
-(provide juego juego? juego-agregar-jugador juego-obtener-jugador-actual juego-lanzar-dados)
+(provide juego juego? juego-agregar-jugador juego-lanzar-dados juego-set-estado juego-actualizar-jugador juego-actualizar-propiedad)
 
 ;------CONSTRUCTOR--------
 ; Descripción: Constructor TDA juego
@@ -18,19 +18,19 @@
 ; Dom: juego (list)
 ; Rec: Bool
 ; Tipo de recursión: No aplica
-(define (juego? juego-x)
-  (if (list? juego-x)
-      (if (= 9 (length juego-x))
-          (if (and (list? (list-ref juego-x 0))
-                   (andmap jugador? (list-ref juego-x 0)); jugadores
-                   (tablero? (list-ref juego-x 1))              ; tablero
-                   (integer? (list-ref juego-x 2))              ; dineroBanco
-                   (integer? (list-ref juego-x 3))
-                   (integer? (list-ref juego-x 4))
-                   (integer? (list-ref juego-x 5))
-                   (integer? (list-ref juego-x 6))
-                   (integer? (list-ref juego-x 7))
-                   (string? (list-ref juego-x 8))
+(define (juego? game)
+  (if (list? game)
+      (if (= 9 (length game))
+          (if (and (list? (list-ref game 0))
+                   (andmap jugador? (list-ref game 0)); jugadores
+                   (tablero? (list-ref game 1))              ; tablero
+                   (integer? (list-ref game 2))              ; dineroBanco
+                   (integer? (list-ref game 3))
+                   (integer? (list-ref game 4))
+                   (integer? (list-ref game 5))
+                   (integer? (list-ref game 6))
+                   (integer? (list-ref game 7))
+                   (string? (list-ref game 8))
                    )
               #t
               #f
@@ -102,40 +102,93 @@
 ; Descripción: Obtiene el estado del juego
 ; Dom: juego
 ; Rec: estadoJuego (string)
-(define (juego-get-estadoJuego juego-x)
-  (list-ref juego-x 8)
+(define (juego-get-estadoJuego game)
+  (list-ref game 8)
   )
 
 ; Descripcion: obtiene jugador turno actual
 ; Dominio: juego
 ; Rec: player
-(define (juego-obtener-jugador-actual juego-x)
+(define (juego-obtener-jugador-actual game)
   (car(filter
    (lambda (jugador)
-     (= (player-get-id jugador) (juego-get-turnoActual juego-x))
+     (= (player-get-id jugador) (juego-get-turnoActual game))
      )
-   (juego-get-jugadores juego-x)
-   )
+   (juego-get-jugadores game)
+   ))
   )
+
+;retorna lista de jugadores que no están de turno
+; Dom: game (juego)
+; Rec: lista de jugadores
+(define (juego-restoJugadores game)
+  (filter
+   (lambda (jugador)
+     (not(= (player-get-id jugador) (juego-get-turnoActual game)))
+     )
+   (juego-get-jugadores game)
+   )
   )
 
 ;------SETTERS------
+
 ; Descripción: Agrega un jugador a la lista de jugadores
 ; Dom: juego X jugador
 ; Rec: juego
-(define (juego-agregar-jugador juego-x jugador-x)
-  (if (and (jugador? jugador-x) (juego? juego-x))
-      (juego (cons jugador-x (juego-get-jugadores juego-x)) (juego-get-tablero juego-x) (juego-get-dineroBanco juego-x) (juego-get-numeroDados juego-x)
-             (juego-get-turnoActual juego-x) (juego-get-tasaImpuesto juego-x) (juego-get-maximoCasas juego-x) (juego-get-maximoHoteles juego-x)
-             (juego-get-estadoJuego juego-x))
+(define (juego-agregar-jugador game player)
+  (if (and (jugador? player) (juego? game))
+      (juego (cons player (juego-get-jugadores game)) (juego-get-tablero game) (juego-get-dineroBanco game) (juego-get-numeroDados game)
+             (juego-get-turnoActual game) (juego-get-tasaImpuesto game) (juego-get-maximoCasas game) (juego-get-maximoHoteles game)
+             (juego-get-estadoJuego game))
       null
       )
   )
 
-;Generador de dados
-; Dom : sin dominio
-; Rec : pair 
-(define juego-lanzar-dados(lambda ()
-  (cons (+ 1 (random 6)) (+ 1 (random 6)))
+; Actualiza el estado del juego
+; Dom: game (juego) X estado (string)
+; Rec: game
+(define (juego-set-estado game estado)
+  (juego (juego-get-jugadores game) (juego-get-tablero game)
+         (juego-get-dineroBanco game) (juego-get-numeroDados game)
+         (juego-get-turnoActual game) (juego-get-tasaImpuesto game)
+         (juego-get-maximoCasas game) (juego-get-maximoHoteles game)
+         estado)
   )
+
+; Actualiza una propiedad en el tablero de un juego. retorna juego actualizado
+; Dom: game (juego) X prop (propiedad)
+; Rec: juego
+(define (juego-actualizar-propiedad game prop)
+  (juego (juego-get-jugadores game) (tablero-actualizar-propiedad (juego-get-tablero game) prop)
+         (juego-get-dineroBanco game) (juego-get-numeroDados game)
+         (juego-get-turnoActual game) (juego-get-tasaImpuesto game)
+         (juego-get-maximoCasas game) (juego-get-maximoHoteles game)
+         (juego-get-estadoJuego game))
+  )
+
+;devuelve el juego con el player actualizado
+; Dom: game (juego) X player (jugador)
+; Rec: juego
+(define (juego-actualizar-jugador game player)
+  (juego (cons player (juego-restoJugadores game)) (juego-get-tablero game)
+         (juego-get-dineroBanco game) (juego-get-numeroDados game)
+         (juego-get-turnoActual game) (juego-get-tasaImpuesto game)
+         (juego-get-maximoCasas game) (juego-get-maximoHoteles game)
+         (juego-get-estadoJuego game))
+  )
+
+
+; Funcion myRandom
+(define (myRandom Xn)
+  (modulo (+ (* 1103515245 Xn) 12345) 2147483648))
+; Funcion getDadoRandom que recibe la semilla y controla los resultados
+(define (getDadoRandom seed)                    
+  (+ 1 (modulo (myRandom seed) 6)))
+
+
+; Descripción: Generador de dados
+; Dom : seed1 X seed2
+; Rec : pair 
+(define (juego-lanzar-dados seed1 seed2)
+  (cons (getDadoRandom seed1) (getDadoRandom seed2))
   )

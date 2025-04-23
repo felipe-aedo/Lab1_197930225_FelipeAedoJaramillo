@@ -1,6 +1,6 @@
 #lang scheme
 
-(provide propiedad propiedad? propiedad-set-dueño propiedad-get-precio propiedad-set-dueño)
+(provide propiedad propiedad? propiedad-set-dueño propiedad-get-precio propiedad-get-id propiedad-get-casas propiedad-set-dueño propiedad-calcular-renta propiedad-comprar-casa)
 
 ;------CONSTRUCTOR--------
 ; Descripción: Constructor TDA propiedad
@@ -95,6 +95,30 @@
 ; Tipo de recursión: no aplica
 (define (propiedad-estaHipotecada prop)
   (list-ref prop 7)
+  )
+
+; Descripcion: calcula la renta de una propiedad considerando casas
+; Dom: prop (propiedad)
+; Rec: int
+(define (propiedad-calcular-renta prop)
+  (if (propiedad-estaHipotecada prop)
+      0
+      (if (not(propiedad-esHotel prop))
+          (+ (propiedad-get-renta prop) (* 0.2 (propiedad-get-renta prop) (propiedad-get-casas prop)))
+          (* 2 (+ (propiedad-get-renta prop) (* 0.2 (propiedad-get-renta prop))))
+          )
+      )
+  )
+
+; Descripcion: Agrega una casa a la propiedad (de ser posible)
+; Dom: prop (propiedad) X game (juego)
+; Rec: propiedad
+(define (propiedad-comprar-casa prop game)
+  (if (< (propiedad-get-casas prop) (list-ref game 6))
+      (propiedad (propiedad-get-id prop) (propiedad-get-nombre prop) (propiedad-get-precio prop) (propiedad-get-renta prop) (propiedad-get-dueño prop) (+ 1 (propiedad-get-casas prop))
+                 (propiedad-esHotel prop) (propiedad-estaHipotecada prop))
+      prop
+      )
   )
 
 ;--------SETTERS------

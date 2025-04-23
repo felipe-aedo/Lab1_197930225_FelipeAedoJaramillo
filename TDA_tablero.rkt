@@ -1,7 +1,7 @@
 #lang scheme
 
 (require "TDA_propiedad.rkt" "TDA_player.rkt" "TDA_carta.rkt")
-(provide tablero tablero? tablero-agregar-propiedad tablero-agregar-cartaSuerte tablero-agregar-cartaComunidad)
+(provide tablero tablero? tablero-agregar-propiedad tablero-actualizar-propiedad tablero-agregar-cartaSuerte tablero-agregar-cartaComunidad tablero-obtener-propiedad)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA tablero
@@ -66,6 +66,16 @@
   (cadddr tablero-x)
   )
 
+; Descripcion: obtiene la propiedad que coincide con la posicion ingresada
+; Dom: tab (tablero) X pos (int)
+; rec: propiedad
+(define (tablero-obtener-propiedad tab pos)
+  (if (null? (filter (lambda(p) (= pos (cdr p))) (tablero-get-propiedades tab)))
+      null
+      (caar(filter (lambda(p) (= pos (cdr p))) (tablero-get-propiedades tab)))
+      )
+  )
+
 ;-----SETTERS-----
 ; Descripción: agrega una propiedad a la lista de propiedades del tablero
 ; Dom: tablero (tablero) X lista de pares (propiedad , posicion)
@@ -73,6 +83,18 @@
 ; Tipo de recursión: no aplica
 (define (tablero-agregar-propiedad tab propiedades)
   (tablero propiedades (tablero-get-cartasSuerte tab) (tablero-get-cartasComunidad tab) (tablero-get-casillasEspeciales tab))
+  )
+
+; actualiza una propiedad en la lista de propiedades. retorna el tablero actualizado
+; Dom: tab (tablero) X prop (propiedad)
+; Rec: tablero
+(define (tablero-actualizar-propiedad tab prop)
+  (tablero
+  (map (lambda (p) (if (= (propiedad-get-id prop) (propiedad-get-id (car p))) (cons prop (cdr p)) p)) (tablero-get-propiedades tab))
+  (tablero-get-cartasSuerte tab)
+  (tablero-get-cartasComunidad tab)
+  (tablero-get-casillasEspeciales tab)
+  )
   )
 
 ; Descripción: agrega una carta a la lista de cartasSuerte
