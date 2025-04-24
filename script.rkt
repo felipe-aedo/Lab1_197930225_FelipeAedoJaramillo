@@ -14,8 +14,8 @@
 (define prop4 (propiedad 4 "Avenida Vermont" 100 35 null 0 #f #f))
 (define prop5 (propiedad 5 "Avenida Connecticut" 120 38 null 0 #f #f))
 (define prop6 (propiedad 6 "Plaza San Carlos" 140 40 null 0 #f #f))
-(define prop7 (propiedad 7 "Avenida St. James" 180 14 #f 0 #f #f))
-(define prop8 (propiedad 8 "Avenida Tennessee" 180 14 #f 0 #f #f))
+(define prop7 (propiedad 7 "Avenida St. James" 180 14 null 0 #f #f))
+(define prop8 (propiedad 8 "Avenida Tennessee" 180 14 null 0 #f #f))
 
 (define lista-propiedades (list (cons prop1 1) (cons prop2 3) (cons prop3 6) (cons prop4 8) (cons prop5 9) (cons prop6 11) (cons prop7 13) (cons prop8 14)))
 
@@ -40,7 +40,7 @@
 (define board2 (tablero-agregar-cartaComunidad board1 lista-comunidad))
 
 ; 5. Creación de un nuevo juego
-(define g0 (juego '() board2 20000 2 1 10 4 1 "preparation"))
+(define g0 (juego '() board2 20000 2 0 10 4 1 "preparation"))
 
 ; 6. Agregar jugadores al juego
 (define g1 (juego-agregar-jugador g0 p1))
@@ -50,23 +50,51 @@
 ; 7. Jugar
 (display "===== CAPITALIA =====\n\n")
 ;actualizar estado
-(define g4(juego-set-estado g3 "playing"))
+(define g4(juego-set-estado (juego-set-turno g3 1) "playing"))
 
 ; Turno 1: Carlos
 (display "TURNO 1: Carlos\n")
-
+;generar semillas y par de dados
 (define semilla-1 12345)
 (define semilla-2 51234)
 (define dados-carlos (juego-lanzar-dados semilla-1 semilla-2))
 
-(define p1-movido (jugador-mover p1 dados-carlos g2))
+;mover player
+(define p1-movido (jugador-mover p1 dados-carlos g4))
 
-(define posicion-carlos (player-get-posicion p1-movido))
+(define posicion-carlos (jugador-get-posicion p1-movido))
+(display "Carlos cae en la posición ") (display posicion-carlos) (display "\n")
 (define prop-carlos (tablero-obtener-propiedad board2 posicion-carlos))
 
-(define p1-actualizado (player-comprar-propiedad p1-movido prop-carlos))
-(define prop-carlos-actualizada (propiedad-set-dueño prop-carlos 1))
+;Carlos compra una propiedad
+(define p1-actualizado (jugador-comprar-propiedad p1-movido prop-carlos))
+(define prop-carlos-actualizada (propiedad-set-dueño prop-carlos (jugador-get-id p1-actualizado)))
+(display "Carlos acaba de comprar ") (display (propiedad-get-nombre prop-carlos)) (display "\n\n")
 
+;actualizar juego
 (define g5 (juego-actualizar-jugador g4 p1-actualizado))
 (define g6 (juego-actualizar-propiedad g5 prop-carlos-actualizada))
 
+; Turno 2: Ana
+(define g7 (juego-set-turno g6 2))
+(display "TURNO 2: Ana\n")
+;generar semillas y par de dados
+(define semilla-3 81221)
+(define semilla-4 15241)
+(define dados-ana (juego-lanzar-dados semilla-3 semilla-4))
+
+;mover player
+(define p2-movido (jugador-mover p2 dados-ana g7))
+
+(define posicion-ana (jugador-get-posicion p2-movido))
+(display "Ana cae en la posición ") (display posicion-ana) (display "\n")
+(define prop-ana (tablero-obtener-propiedad (juego-get-tablero g6) posicion-ana))
+
+;Ana compra una propiedad
+(define p2-actualizado (jugador-comprar-propiedad p2-movido prop-ana))
+(define prop-ana-actualizada (propiedad-set-dueño prop-ana (jugador-get-id p2-actualizado)))
+(display "Ana acaba de comprar ") (display (propiedad-get-nombre prop-ana)) (display "\n\n")
+
+;actualizar juego
+(define g8 (juego-actualizar-jugador g7 p2-actualizado))
+(define g9 (juego-actualizar-propiedad g8 prop-ana-actualizada))

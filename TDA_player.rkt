@@ -1,7 +1,7 @@
 #lang scheme
 
 (require "TDA_propiedad.rkt")
-(provide jugador jugador? player-get-id player-get-posicion player-get-dinero player-comprar-propiedad jugador-mover)
+(provide jugador jugador? jugador-get-id jugador-get-posicion jugador-get-dinero jugador-comprar-propiedad jugador-set-posicion)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA player
@@ -11,7 +11,6 @@
 (define (jugador id nombre dinero propiedades posicion carcel cartas)
    (list id nombre dinero propiedades posicion carcel cartas)
   )
-
 
 ;-----PERTENENCIA-----
 ; Descripción: Comprueba si es un player
@@ -39,18 +38,17 @@
 ; Dom: player
 ; Rec: id (integer)
 ; Tipo recursión: No aplica
-(define (player-get-id player)
+(define (jugador-get-id player)
   (if (jugador? player) (list-ref player 0)
       null
       )
   )
 
-
 ; Descripción: Obtiene el nombre de un player
 ; Dom: player
 ; Rec: name (string)
 ; Tipo recursión: No aplica
-(define (player-get-nombre player)
+(define (jugador-get-nombre player)
   (if (jugador? player) (list-ref player 1)
       null
       )
@@ -60,7 +58,7 @@
 ; Dom: player
 ; Rec: dinero (integer)
 ; Tipo recursión: No aplica
-(define (player-get-dinero player)
+(define (jugador-get-dinero player)
   (if (jugador? player) (list-ref player 2)
       null
       )
@@ -70,7 +68,7 @@
 ; Dom: player
 ; Rec: propiedades (list)
 ; Tipo recursión: No aplica
-(define (player-get-propiedades player)
+(define (jugador-get-propiedades player)
   (if (jugador? player) (list-ref player 3)
       null
       )
@@ -80,7 +78,7 @@
 ; Dom: player
 ; Rec: posicion (integer)
 ; Tipo recursión: No aplica
-(define (player-get-posicion player)
+(define (jugador-get-posicion player)
   (if (jugador? player) (list-ref player 4)
       null
       )
@@ -90,7 +88,7 @@
 ; Dom: player
 ; Rec: estaencarcel (bool)
 ; Tipo recursión: No aplica
-(define (player-estaencarcel player)
+(define (jugador-estaencarcel player)
   (if (jugador? player) (list-ref player 5)
       null
       )
@@ -100,7 +98,7 @@
 ; Dom: player
 ; Rec: TotalCartasSalirCarcel (integer)
 ; Tipo recursión: No aplica
-(define (player-get-cartas player)
+(define (jugador-get-cartas player)
   (if (jugador? player) (list-ref player 6)
       null
       )
@@ -111,10 +109,10 @@
 ; Dom: player X dinero (integer)
 ; Rec: player (player)
 ; Tipo recursión: No aplica
-(define (player-set-dinero player dinero)
+(define (jugador-set-dinero player dinero)
   (if (jugador? player)
-      (jugador (player-get-id player) (player-get-nombre player) dinero (player-get-propiedades player)
-              (player-get-posicion player) (player-estaencarcel player) (player-get-cartas player))
+      (jugador (jugador-get-id player) (jugador-get-nombre player) dinero (jugador-get-propiedades player)
+              (jugador-get-posicion player) (jugador-estaencarcel player) (jugador-get-cartas player))
       null
       )
   )
@@ -123,53 +121,54 @@
 ; Dom: player X posicion (integer)
 ; Rec: player (player)
 ; Tipo recursión: No aplica
-(define (player-set-posicion player posicion)
+(define (jugador-set-posicion player posicion)
   (if (jugador? player)
-      (jugador (player-get-id player) (player-get-nombre player) (player-get-dinero player) (player-get-propiedades player)
-              posicion (player-estaencarcel player) (player-get-cartas player))
+      (jugador (jugador-get-id player) (jugador-get-nombre player) (jugador-get-dinero player) (jugador-get-propiedades player)
+              posicion (jugador-estaencarcel player) (jugador-get-cartas player))
       null
       )
-  )
-
-; Descripción: Mueve al jugador tras lanzar dados, retorna el player con posicion actualizada
-; Dom: jugador X par de dados X juego
-; Rec: jugador
-(define (jugador-mover player pair game)
-  (player-set-posicion player (+ (car pair) (cdr pair)))
   )
 
 ; Descripción: Alterna el valor de verdad de EstaEnCarcel para el jugador
 ; Dom: player
 ; Rec: player (player)
 ; Tipo recursión: No aplica
-(define (player-switch-carcel player)
+(define (jugador-switch-carcel player)
   (if (jugador? player)
-      (jugador (player-get-id player) (player-get-nombre player) (player-get-dinero player) (player-get-propiedades player)
-              (player-get-posicion player) (not (player-estaencarcel player)) (player-get-cartas player))
+      (jugador (jugador-get-id player) (jugador-get-nombre player) (jugador-get-dinero player) (jugador-get-propiedades player)
+              (jugador-get-posicion player) (not (jugador-estaencarcel player)) (jugador-get-cartas player))
       null
       )
   )
-
 
 ; Descripción: Agrega una propiedad a la lista de propiedades del jugador
 ; Dom: player(integer) X idPropiedad(integer)
 ; Rec: player (player)
 ; Tipo de recursión: No aplica
-(define (player-agregar-propiedad player IdPropiedad)
+(define (jugador-agregar-propiedad player IdPropiedad)
   (if (jugador? player)
-      (jugador (player-get-id player) (player-get-nombre player) (player-get-dinero player) (cons IdPropiedad (player-get-propiedades player))
-              (player-get-posicion player) (player-estaencarcel player) (player-get-cartas player))
+      (jugador (jugador-get-id player) (jugador-get-nombre player) (jugador-get-dinero player) (cons IdPropiedad (jugador-get-propiedades player))
+              (jugador-get-posicion player) (jugador-estaencarcel player) (jugador-get-cartas player))
       null
       )
   )
 
-
 ; Descripción: Compra una propiedad si es posible. retorna el player resultante
 ; Dom : player(jugador) X prop(propiedad)
 ; rec : player
-(define (player-comprar-propiedad player prop)
-  (if (>= (player-get-dinero player) (propiedad-get-precio prop))
-      (player-agregar-propiedad (player-set-dinero player (- (player-get-dinero player) (propiedad-get-precio prop))) (propiedad-get-id prop))
+(define (jugador-comprar-propiedad player prop)
+  (if (>= (jugador-get-dinero player) (propiedad-get-precio prop))
+      (jugador-agregar-propiedad (jugador-set-dinero player (- (jugador-get-dinero player) (propiedad-get-precio prop))) (propiedad-get-id prop))
       player
       )
+  )
+
+; Descripción: Compra una propiedad si es posible. retorna el player resultante
+; Dom : pagador(jugador) X receptor(jugador) X monto (int)
+; rec : lista de players
+(define (jugador-pagar-renta pagador receptor monto)
+  (list (jugador (jugador-get-id pagador) (jugador-get-nombre pagador) (- (jugador-get-dinero pagador) monto) (jugador-get-propiedades pagador)
+              (jugador-get-posicion pagador) (jugador-estaencarcel pagador) (jugador-get-cartas pagador))
+        (jugador (jugador-get-id receptor) (jugador-get-nombre receptor) (+ (jugador-get-dinero receptor) monto) (jugador-get-propiedades receptor)
+              (jugador-get-posicion receptor) (jugador-estaencarcel receptor) (jugador-get-cartas receptor)))
   )

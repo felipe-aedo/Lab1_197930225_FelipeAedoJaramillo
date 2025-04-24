@@ -1,6 +1,6 @@
 #lang scheme
 
-(provide propiedad propiedad? propiedad-set-dueño propiedad-get-precio propiedad-get-id propiedad-get-casas propiedad-set-dueño propiedad-calcular-renta propiedad-comprar-casa)
+(provide propiedad propiedad? propiedad-set-dueño propiedad-get-precio propiedad-get-id propiedad-get-casas propiedad-get-nombre propiedad-set-dueño propiedad-calcular-renta propiedad-construir-casa)
 
 ;------CONSTRUCTOR--------
 ; Descripción: Constructor TDA propiedad
@@ -110,10 +110,21 @@
       )
   )
 
+;--------SETTERS------
+; Descripción: Establece el dueño de una propiedad
+; Dom: propiedad(propiedad) X idDueño(int)
+; Rec: propiedad
+; Tipo de recursión: no aplica
+(define (propiedad-set-dueño prop dueño)
+  (propiedad (propiedad-get-id prop) (propiedad-get-nombre prop) (propiedad-get-precio prop)
+             (propiedad-get-renta prop) dueño (propiedad-get-casas prop) (propiedad-esHotel prop)
+             (propiedad-estaHipotecada prop))
+  )
+
 ; Descripcion: Agrega una casa a la propiedad (de ser posible)
 ; Dom: prop (propiedad) X game (juego)
 ; Rec: propiedad
-(define (propiedad-comprar-casa prop game)
+(define (propiedad-construir-casa prop game)
   (if (< (propiedad-get-casas prop) (list-ref game 6))
       (propiedad (propiedad-get-id prop) (propiedad-get-nombre prop) (propiedad-get-precio prop) (propiedad-get-renta prop) (propiedad-get-dueño prop) (+ 1 (propiedad-get-casas prop))
                  (propiedad-esHotel prop) (propiedad-estaHipotecada prop))
@@ -121,13 +132,25 @@
       )
   )
 
-;--------SETTERS------
-; Descripción: Establece el dueño de una propiedad
-; Dom: propiedad(propiedad) X idDueño(int)
+; Descripcion: construye un hotel en la propiedad (de ser posible)
+; Dom: prop (propiedad) X game (juego)
 ; Rec: propiedad
-; Tipo de recursión: no aplica
-(define (propiedad-set-dueño propiedad-x dueño)
-  (propiedad (propiedad-get-id propiedad-x) (propiedad-get-nombre propiedad-x) (propiedad-get-precio propiedad-x)
-             (propiedad-get-renta propiedad-x) dueño (propiedad-get-casas propiedad-x) (propiedad-esHotel propiedad-x)
-             (propiedad-estaHipotecada propiedad-x))
+(define (propiedad-construir-hotel prop game)
+  (if (= (propiedad-get-casas prop) (list-ref game 6))
+      (propiedad (propiedad-get-id prop) (propiedad-get-nombre prop) (propiedad-get-precio prop) (propiedad-get-renta prop)
+                 (propiedad-get-dueño prop) 0 #f (propiedad-estaHipotecada prop))
+      prop
+      )
+  )
+
+; Descripcion: hipoteca la propiedad
+; Dom: prop (propiedad)
+; Rec: propiedad
+(define (propiedad-hipotecar prop)
+  (if (not (propiedad-estaHipotecada prop))
+      (propiedad (propiedad-get-id prop) (propiedad-get-nombre prop) (propiedad-get-precio prop)
+                 (propiedad-get-renta prop) (propiedad-get-dueño prop) (propiedad-get-casas prop)
+                 (propiedad-esHotel prop) #t)
+      prop
+      )
   )

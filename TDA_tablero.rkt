@@ -1,7 +1,8 @@
 #lang scheme
 
 (require "TDA_propiedad.rkt" "TDA_player.rkt" "TDA_carta.rkt")
-(provide tablero tablero? tablero-agregar-propiedad tablero-actualizar-propiedad tablero-agregar-cartaSuerte tablero-agregar-cartaComunidad tablero-obtener-propiedad)
+(provide tablero tablero? tablero-agregar-propiedad tablero-actualizar-propiedad tablero-agregar-cartaSuerte
+         tablero-agregar-cartaComunidad tablero-obtener-propiedad tablero-get-propiedades tablero-get-casillasEspeciales)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA tablero
