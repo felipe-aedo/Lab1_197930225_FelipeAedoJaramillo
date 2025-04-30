@@ -1,7 +1,8 @@
 #lang scheme
 
 (require "TDA_propiedad.rkt")
-(provide jugador jugador? jugador-get-id jugador-get-posicion jugador-get-dinero jugador-comprar-propiedad jugador-set-posicion)
+(provide jugador jugador? jugador-get-id jugador-get-posicion jugador-get-propiedades jugador-get-dinero jugador-estaencarcel
+         jugador-comprar-propiedad jugador-set-posicion jugador-pagar-renta)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA player
@@ -171,4 +172,11 @@
               (jugador-get-posicion pagador) (jugador-estaencarcel pagador) (jugador-get-cartas pagador))
         (jugador (jugador-get-id receptor) (jugador-get-nombre receptor) (+ (jugador-get-dinero receptor) monto) (jugador-get-propiedades receptor)
               (jugador-get-posicion receptor) (jugador-estaencarcel receptor) (jugador-get-cartas receptor)))
+  )
+
+;verifica si un jugador está en bancarrota
+; Dom: player (jugador)
+; Rec: bool
+(define (jugador-esta-en-bancarrota player)
+ (<= (jugador-get-dinero player) 0)     
   )

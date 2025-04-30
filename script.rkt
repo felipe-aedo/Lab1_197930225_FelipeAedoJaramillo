@@ -1,6 +1,6 @@
 #lang scheme
 
-(require "TDA_tablero.rkt" "TDA_carta.rkt" "TDA_player.rkt" "TDA_propiedad.rkt" "TDA_juego.rkt")
+(require "main_197930225_Felipe_AedoJaramillo.rkt")
 
 ; 1. Creación de jugadores
 (define p1 (jugador 1 "Carlos" 1500 '() 0 #f 0))
@@ -17,7 +17,8 @@
 (define prop7 (propiedad 7 "Avenida St. James" 180 14 null 0 #f #f))
 (define prop8 (propiedad 8 "Avenida Tennessee" 180 14 null 0 #f #f))
 
-(define lista-propiedades (list (cons prop1 1) (cons prop2 3) (cons prop3 6) (cons prop4 8) (cons prop5 9) (cons prop6 11) (cons prop7 13) (cons prop8 14)))
+(define lista-propiedades (list (cons prop1 1) (cons prop2 3) (cons prop3 6) (cons prop4 8) (cons prop5 9)
+                                (cons prop6 11) (cons prop7 13) (cons prop8 14)))
 
 ; 3. Creación de cartas de suerte y arca comunal
 (define chance1 (carta 1 "suerte" "Avance hasta la casilla de salida" 'go-to-start))
@@ -31,7 +32,8 @@
 (define lista-comunidad (list community1 community2 community3))
 
 ; 4. Creación del tablero
-(define empty-board (tablero '() '() '() (list (cons 'salida 0) (cons 'carcel 10) (cons 'suerte 7) (cons 'comunidad 17))))
+(define empty-board (tablero '() '() '() (list (cons 'salida 0) (cons 'comunidad 2) (cons 'suerte 4) (cons 'carcel 5)
+                                               (cons 'suerte 7) (cons 'carcel 10) (cons 'suerte 12))))
 
 (define board0 (tablero-agregar-propiedad empty-board lista-propiedades))
 ;cartasSuerte

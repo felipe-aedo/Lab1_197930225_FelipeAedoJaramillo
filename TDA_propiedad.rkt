@@ -1,6 +1,8 @@
 #lang scheme
 
-(provide propiedad propiedad? propiedad-set-dueño propiedad-get-precio propiedad-get-id propiedad-get-casas propiedad-get-nombre propiedad-set-dueño propiedad-calcular-renta propiedad-construir-casa)
+(provide propiedad propiedad? propiedad-set-dueño propiedad-get-precio propiedad-get-renta propiedad-get-id propiedad-get-dueño
+          propiedad-esHotel propiedad-estaHipotecada propiedad-get-casas propiedad-get-nombre propiedad-set-dueño
+          )
 
 ;------CONSTRUCTOR--------
 ; Descripción: Constructor TDA propiedad
@@ -97,18 +99,6 @@
   (list-ref prop 7)
   )
 
-; Descripcion: calcula la renta de una propiedad considerando casas
-; Dom: prop (propiedad)
-; Rec: int
-(define (propiedad-calcular-renta prop)
-  (if (propiedad-estaHipotecada prop)
-      0
-      (if (not(propiedad-esHotel prop))
-          (+ (propiedad-get-renta prop) (* 0.2 (propiedad-get-renta prop) (propiedad-get-casas prop)))
-          (* 2 (+ (propiedad-get-renta prop) (* 0.2 (propiedad-get-renta prop))))
-          )
-      )
-  )
 
 ;--------SETTERS------
 ; Descripción: Establece el dueño de una propiedad
@@ -121,27 +111,7 @@
              (propiedad-estaHipotecada prop))
   )
 
-; Descripcion: Agrega una casa a la propiedad (de ser posible)
-; Dom: prop (propiedad) X game (juego)
-; Rec: propiedad
-(define (propiedad-construir-casa prop game)
-  (if (< (propiedad-get-casas prop) (list-ref game 6))
-      (propiedad (propiedad-get-id prop) (propiedad-get-nombre prop) (propiedad-get-precio prop) (propiedad-get-renta prop) (propiedad-get-dueño prop) (+ 1 (propiedad-get-casas prop))
-                 (propiedad-esHotel prop) (propiedad-estaHipotecada prop))
-      prop
-      )
-  )
 
-; Descripcion: construye un hotel en la propiedad (de ser posible)
-; Dom: prop (propiedad) X game (juego)
-; Rec: propiedad
-(define (propiedad-construir-hotel prop game)
-  (if (= (propiedad-get-casas prop) (list-ref game 6))
-      (propiedad (propiedad-get-id prop) (propiedad-get-nombre prop) (propiedad-get-precio prop) (propiedad-get-renta prop)
-                 (propiedad-get-dueño prop) 0 #f (propiedad-estaHipotecada prop))
-      prop
-      )
-  )
 
 ; Descripcion: hipoteca la propiedad
 ; Dom: prop (propiedad)
