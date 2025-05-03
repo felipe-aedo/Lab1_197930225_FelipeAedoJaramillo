@@ -3,7 +3,7 @@
 (require "TDA_propiedad.rkt" "TDA_player.rkt" "TDA_carta.rkt")
 (provide tablero tablero? tablero-agregar-propiedad tablero-actualizar-propiedad tablero-agregar-cartaSuerte
          tablero-agregar-cartaComunidad tablero-obtener-propiedad tablero-get-propiedades tablero-get-casillasEspeciales
-         tablero-get-cartasSuerte tablero-get-cartasComunidad)
+         tablero-get-cartasSuerte tablero-get-cartasComunidad tablero-get-posicionX)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA tablero
@@ -30,7 +30,7 @@
        (andmap pair? (list-ref tab 0))
        (andmap carta? (list-ref tab 1))
        (andmap carta? (list-ref tab 2))
-       ;(andmap integer? (list-ref tab 3))
+       (andmap pair? (list-ref tab 3))
        )
   )
 
@@ -75,6 +75,16 @@
   (if (null? (filter (lambda(p) (= pos (cdr p))) (tablero-get-propiedades tab)))
       null
       (caar(filter (lambda(p) (= pos (cdr p))) (tablero-get-propiedades tab)))
+      )
+  )
+
+; Obtiene el item (propiedad o casillaEspecial) que exista en la posicion X
+; Dom: tab (tablero) X pos (int)
+; Rec: casillaEspecial o propiedad (pair)
+(define (tablero-get-posicionX tab pos)
+  (if (tablero? tab)
+      (caar(filter (lambda(par) (= pos (cdr par))) (append (tablero-get-propiedades tab) (tablero-get-casillasEspeciales tab))))
+      '()
       )
   )
 

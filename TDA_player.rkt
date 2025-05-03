@@ -1,8 +1,9 @@
 #lang scheme
 
 (require "TDA_propiedad.rkt")
-(provide jugador jugador? jugador-get-id jugador-get-posicion jugador-get-propiedades jugador-get-dinero jugador-estaencarcel
-         jugador-comprar-propiedad jugador-set-posicion jugador-pagar-renta)
+(provide jugador jugador? jugador-get-id jugador-get-posicion jugador-get-propiedades jugador-get-dinero jugador-estaencarcel jugador-get-cartas
+         jugador-comprar-propiedad jugador-comprar-casa jugador-set-posicion jugador-pagar-renta jugador-posee-propiedad? jugador-puede-comprar?
+         jugador-pagar-multa-carcel jugador-switch-carcel jugador-esta-en-bancarrota jugador-gastar-carta)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA player
@@ -142,6 +143,17 @@
       )
   )
 
+; Descripción: Gasta una carta para salir de la carcel (no desencarcela)
+; dom: player(jugador)
+; rec: player
+(define (jugador-gastar-carta player)
+  (if (jugador? jugador)
+      (jugador (jugador-get-id player) (jugador-get-nombre player) (jugador-get-dinero player) (jugador-get-propiedades player)
+              (jugador-get-posicion player) (jugador-estaencarcel player) (- (jugador-get-cartas player) 1))
+      jugador
+      )
+  )
+
 ; Descripción: Agrega una propiedad a la lista de propiedades del jugador
 ; Dom: player(integer) X idPropiedad(integer)
 ; Rec: player (player)
@@ -153,30 +165,72 @@
       null
       )
   )
+; verifica si el jugador puede comprar la propiedad
+; Dom : player (jugador) X prop (propiedad)
+; Rec : bool
+(define (jugador-puede-comprar? player prop)
+   (and (propiedad? prop) (>= (jugador-get-dinero player) (propiedad-get-precio prop)) (null? (propiedad-get-dueño prop)))
+  )
 
 ; Descripción: Compra una propiedad si es posible. retorna el player resultante
 ; Dom : player(jugador) X prop(propiedad)
 ; rec : player
 (define (jugador-comprar-propiedad player prop)
-  (if (>= (jugador-get-dinero player) (propiedad-get-precio prop))
-      (jugador-agregar-propiedad (jugador-set-dinero player (- (jugador-get-dinero player) (propiedad-get-precio prop))) (propiedad-get-id prop))
+  (if (jugador-puede-comprar? player prop)
+      (jugador-agregar-propiedad (jugador-set-dinero player (- (jugador-get-dinero player) (propiedad-get-precio prop)))
+                                 (propiedad-get-id prop))
       player
       )
   )
 
-; Descripción: Compra una propiedad si es posible. retorna el player resultante
+; Actualiza el player tras un intento de comprar casa. Retorna player sin cambios en caso de fallo.
+; Dom : player (jugador) X prop (propiedad)
+; Rec : jugador
+(define (jugador-comprar-casa player prop)
+  (if (and (propiedad? prop) (>= (jugador-get-dinero player) (propiedad-get-precio prop)) (jugador-posee-propiedad? player prop))
+      (jugador-set-dinero player (- (jugador-get-dinero player) (propiedad-get-precio prop)))
+      player
+      )
+  )
+
+; Descripcion: paga una multa para salir de la carcel
+; Dom : player (jugador)
+; Rec : jugador
+(define (jugador-pagar-multa-carcel player)
+  (if (> (jugador-get-dinero player) 500) ;verificar que le alcanza
+      (jugador-set-dinero (jugador-switch-carcel player) (- (jugador-get-dinero player) 500)) ; retornar jugador libre de carcel y con multa aplicada
+      player ;si no puede pagar retorna player sin consecuencias
+      )
+  )
+
+; Descripción: Entrega una lista de players tras realizar una transacción por un monto dado
 ; Dom : pagador(jugador) X receptor(jugador) X monto (int)
 ; rec : lista de players
 (define (jugador-pagar-renta pagador receptor monto)
-  (list (jugador (jugador-get-id pagador) (jugador-get-nombre pagador) (- (jugador-get-dinero pagador) monto) (jugador-get-propiedades pagador)
-              (jugador-get-posicion pagador) (jugador-estaencarcel pagador) (jugador-get-cartas pagador))
-        (jugador (jugador-get-id receptor) (jugador-get-nombre receptor) (+ (jugador-get-dinero receptor) monto) (jugador-get-propiedades receptor)
-              (jugador-get-posicion receptor) (jugador-estaencarcel receptor) (jugador-get-cartas receptor)))
+  (if (<= (jugador-get-dinero pagador) monto)
+      ;bancarrota (no puede-pagar)
+      (list (jugador-set-dinero pagador 0)
+            (jugador-set-dinero receptor (+ (jugador-get-dinero receptor) (- monto (- monto (jugador-get-dinero pagador))))))
+      ;pago realizado
+      (list (jugador-set-dinero pagador (- (jugador-get-dinero pagador) monto))
+            (jugador-set-dinero receptor (+ (jugador-get-dinero receptor) monto)))
+      )
   )
 
+;----OTROS----
 ;verifica si un jugador está en bancarrota
 ; Dom: player (jugador)
 ; Rec: bool
 (define (jugador-esta-en-bancarrota player)
  (<= (jugador-get-dinero player) 0)     
+  )
+
+;verifica si un jugador posee una propiedad dada
+; dom: player (jugador) X prop (propiedad)
+; rec: bool
+(define (jugador-posee-propiedad? player prop)
+  (if (propiedad? prop)
+      (ormap (lambda(pr) (= (propiedad-get-id prop) pr)) (jugador-get-propiedades player))
+      #f
+      )
   )
