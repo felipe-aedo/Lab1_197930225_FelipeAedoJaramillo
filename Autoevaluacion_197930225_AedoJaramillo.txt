@@ -1,0 +1,37 @@
+Nº Requerimientos Funcionales           Puntaje
+RF01 TDA                                  1
+RF02 TDA jugador                          1
+RF03 TDA Propiedad                        1
+RF04 TDA Carta                            1
+RF05 TDA Tablero                          1
+RF06 TDA Juego   	  					  1
+RF07 tablero-agregar-propiedad   		  1
+RF08 juego-agregar-jugador 				  1
+RF09 juego-obtener-jugador-actual	      1
+RF10 juego-lanzar-dados					  1
+RF11 jugador-mover             			  1
+RF12 jugador-comprar-propiedad            1
+RF13 jugador-calcular-renta   			  1
+RF14 propiedad-calcular-renta		      1
+RF15 propiedad-construir-casa   	      1
+RF16 propiedad-construir-hotel            1
+RF17 jugador-pagar-renta                  1
+RF18 propiedad-hipotecar                  1
+RF19 juego-extraer-carta                  1
+RF20 jugador-esta-en-bancarrota		      1
+RF21 juego-jugar-turno                    1
+
+
+Nº Requerimientos No Funcionales      Puntaje
+RNF1  Autoevaluación                        1
+RNF2  Lenguaje                              1
+RNF3  Version                               1
+RNF4  Standart                              1
+RNF5  No variables                          1
+RNF6  Documentacion                         1
+RNF7  Dom->Rec                              1
+RNF8  Organizacion                          1
+RNF9  Historial                             1
+RNF10 Script de pruebas     				1
+RNF11 Prerrequisitos    					1
+

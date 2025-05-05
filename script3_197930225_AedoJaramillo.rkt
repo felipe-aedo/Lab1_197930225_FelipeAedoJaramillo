@@ -1,6 +1,6 @@
 #lang scheme
 
-(require "main_197930225_Felipe_AedoJaramillo.rkt")
+(require "main_197930225_AedoJaramillo.rkt")
 
 ; 1. Jugadores
 (define j1 (jugador 1 "Link" 2500 '() 0 #f 0))

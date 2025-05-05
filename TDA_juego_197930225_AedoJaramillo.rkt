@@ -1,7 +1,8 @@
 #lang scheme
 
-(require "TDA_jugador_197930225_Felipe_AedoJaramillo.rkt" "TDA_carta_197930225_Felipe_AedoJaramillo.rkt"
-         "TDA_propiedad_197930225_Felipe_AedoJaramillo.rkt" "TDA_tablero_197930225_Felipe_AedoJaramillo.rkt")
+(require "TDA_jugador_197930225_AedoJaramillo.rkt" "TDA_carta_197930225_AedoJaramillo.rkt"
+         "TDA_propiedad_197930225_AedoJaramillo.rkt" "TDA_tablero_197930225_AedoJaramillo.rkt")
+
 (provide juego juego? juego-agregar-jugador juego-lanzar-dados juego-actualizar-jugador juego-actualizar-jugadores juego-obtener-jugador-i
          juego-actualizar-propiedad juego-get-tablero jugador-mover juego-set-turno propiedad-calcular-renta jugador-calcular-renta
          propiedad-construir-casa propiedad-construir-hotel juego-jugar-turno juego-get-ultimaPosicion jugador-encarcelar jugador-ir-salida

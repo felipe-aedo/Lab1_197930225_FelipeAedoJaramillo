@@ -1,6 +1,6 @@
 #lang scheme
 
-(require "main_197930225_Felipe_AedoJaramillo.rkt")
+(require "main_197930225_AedoJaramillo.rkt")
 
 ; 1. Creación de jugadores
 ;; Dominio TDA Jugador = id X nombre X dinero X propiedades X posicionActual X estaEnCarcel X totalCartasSalirEnCarcel (esto mide la cantidad actual de cartas salir cárcel que tiene el jugador, se comienza con 0)

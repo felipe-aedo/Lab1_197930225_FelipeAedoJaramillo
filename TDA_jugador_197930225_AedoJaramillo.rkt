@@ -1,6 +1,6 @@
 #lang scheme
 
-(require "TDA_propiedad_197930225_Felipe_AedoJaramillo.rkt")
+(require "TDA_propiedad_197930225_AedoJaramillo.rkt")
 (provide jugador jugador? jugador-get-id jugador-get-nombre jugador-get-posicion jugador-get-propiedades jugador-get-dinero jugador-estaencarcel jugador-get-cartas
          jugador-comprar-propiedad jugador-comprar-casa jugador-set-posicion jugador-pagar-renta jugador-posee-propiedad? jugador-puede-comprar?
          jugador-pagar-multa-carcel jugador-switch-carcel jugador-esta-en-bancarrota jugador-gastar-carta jugador-set-dinero

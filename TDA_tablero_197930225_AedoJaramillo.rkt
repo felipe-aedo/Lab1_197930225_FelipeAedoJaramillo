@@ -1,6 +1,6 @@
 #lang scheme
 
-(require "TDA_propiedad_197930225_Felipe_AedoJaramillo.rkt" "TDA_jugador_197930225_Felipe_AedoJaramillo.rkt" "TDA_carta_197930225_Felipe_AedoJaramillo.rkt")
+(require "TDA_propiedad_197930225_AedoJaramillo.rkt" "TDA_jugador_197930225_AedoJaramillo.rkt" "TDA_carta_197930225_AedoJaramillo.rkt")
 (provide tablero tablero? tablero-agregar-propiedad tablero-actualizar-propiedad tablero-agregar-cartaSuerte
          tablero-agregar-cartaComunidad tablero-obtener-propiedad tablero-get-propiedades tablero-get-casillasEspeciales
          tablero-get-cartasSuerte tablero-get-cartasComunidad tablero-get-posicionX)
