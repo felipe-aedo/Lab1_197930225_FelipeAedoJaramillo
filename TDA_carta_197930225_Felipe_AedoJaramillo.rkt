@@ -1,7 +1,7 @@
 #lang scheme
 
 
-(provide carta carta?)
+(provide carta carta? carta-get-tipo carta-get-accion)
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA carta
@@ -24,6 +24,20 @@
        (integer? (list-ref carta-x 0))
        (string? (list-ref carta-x 1))
        (string? (list-ref carta-x 2))
-       ;(procedure? (list-ref carta-x 3))
+       (procedure? (list-ref carta-x 3))
        )
+  )
+
+;Descripcion: obtiene el tipo de la carta
+;dom : card (carta)
+;rec : string
+(define (carta-get-tipo card)
+  (list-ref card 1)
+  )
+
+;retorna la accion que posee la carta
+;dom : card (carta)
+;rec : procedure
+(define (carta-get-accion card)
+  (list-ref card 3)
   )

@@ -23,14 +23,14 @@
 
 ; 3. Creación de cartas de suerte y arca comunal
 ; TDA Carta = id X tipo X descripcion X accion
-(define chance1 (carta 1 "suerte" "Avance hasta la casilla de salida" 'ir-a-salida))
-(define chance2 (carta 2 "suerte" "Vaya a la cárcel" 'ir-a-carcel))
-(define chance3 (carta 3 "suerte" "El banco le paga $50" 'banco-paga))
+(define chance1 (carta 1 "suerte" "Avance hasta la casilla de salida" jugador-ir-salida))
+(define chance2 (carta 2 "suerte" "Vaya a la cárcel" jugador-encarcelar))
+(define chance3 (carta 3 "suerte" "El banco le paga $50" banco-paga))
 
 
-(define community1 (carta 4 "comunidad" "Pague impuestos por $100" 'pagar-impuesto))
-(define community2 (carta 5 "comunidad" "Es su cumpleaños, reciba $10 de cada jugador" 'cumpleanos))
-(define community3 (carta 6 "comunidad" "Salga de la cárcel gratis" 'salir-carcel)) ;; Esto cuenta como carta salidaCárcel y si el jugador obtiene esta tarjeta aumenta el contador de totalCartasSalirEnCarcel de su TDA.
+(define community1 (carta 4 "comunidad" "Pague impuestos por $100" evento-impuesto))
+(define community2 (carta 5 "comunidad" "Es su cumpleaños, reciba $10 de cada jugador" evento-cumpleaños))
+(define community3 (carta 6 "comunidad" "Salga de la cárcel gratis" jugador-agregar-carta)) ;; Esto cuenta como carta salidaCárcel y si el jugador obtiene esta tarjeta aumenta el contador de totalCartasSalirEnCarcel de su TDA.
 
 
  ; 4. Creación del tablero
@@ -123,15 +123,12 @@ g3
 g4
 
 (display "TURNO 3: Carlos\n")
-; Turno 3: Carlos. Carlos se encuentra en posición 3, al usar semilla 5 y 3 obtiene dado1: 3 y dado2: 5. Se mueve 8 posiciones, quedando en posición 11 (3 + 8)
-;; En tablero: posición (11 prop6) La posición 11 es prop6
-;; Dinero actual jugador 1 Carlos = 900
-;; (define prop6 (propiedad 6 "Plaza San Carlos" 800 10 #f 0 #f #f))
-;; comprarPropiedad_or_construirCasa: #t
+; Turno 3: Carlos. (false en todas las flags)
+;; comprarPropiedad_or_construirCasa: #f
 ;; construirHotel: #f
 ;; pagarMultaSalirCarcel: #f
 ;; usarTarjetaSalirCarcel: #f
-(define g5 (juego-jugar-turno g4 (juego-lanzar-dados 5 0) #t #f #f #f)) 
+(define g5 (juego-jugar-turno g4 (juego-lanzar-dados 3 1) #f #f #f #f)) 
 g5 ;; esto imprime g5
 
 (display "TURNO 4: Ana\n")
@@ -145,5 +142,13 @@ g5 ;; esto imprime g5
 (define g6 (juego-jugar-turno g5 (juego-lanzar-dados 3 4) #f #f #t #f)) 
 g6 ;; esto imprime g6 
 
+(display "TURNO 5: Carlos\n")
+;; comprarPropiedad_or_construirCasa: #t
+;; construirHotel: #f
+;; pagarMultaSalirCarcel: #f
+;; usarTarjetaSalirCarcel: #f
 
-(jugador-esta-en-bancarrota (juego-obtener-jugador-i g5 1))
+(define g7 (juego-jugar-turno g6 (juego-lanzar-dados 1 1) #t #f #f #f))
+g7
+
+(jugador-esta-en-bancarrota (juego-obtener-jugador-i g7 1))

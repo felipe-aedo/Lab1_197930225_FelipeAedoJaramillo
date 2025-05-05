@@ -1,6 +1,6 @@
 #lang scheme
 
-(require "TDA_propiedad.rkt" "TDA_player.rkt" "TDA_carta.rkt")
+(require "TDA_propiedad_197930225_Felipe_AedoJaramillo.rkt" "TDA_jugador_197930225_Felipe_AedoJaramillo.rkt" "TDA_carta_197930225_Felipe_AedoJaramillo.rkt")
 (provide tablero tablero? tablero-agregar-propiedad tablero-actualizar-propiedad tablero-agregar-cartaSuerte
          tablero-agregar-cartaComunidad tablero-obtener-propiedad tablero-get-propiedades tablero-get-casillasEspeciales
          tablero-get-cartasSuerte tablero-get-cartasComunidad tablero-get-posicionX)
@@ -83,7 +83,7 @@
 ; Rec: casillaEspecial o propiedad (pair)
 (define (tablero-get-posicionX tab pos)
   (if (tablero? tab)
-      (caar(filter (lambda(par) (= pos (cdr par))) (append (tablero-get-propiedades tab) (tablero-get-casillasEspeciales tab))))
+      (caar (filter (lambda(par) (= pos (cdr par))) (append (tablero-get-propiedades tab) (tablero-get-casillasEspeciales tab))))
       '()
       )
   )

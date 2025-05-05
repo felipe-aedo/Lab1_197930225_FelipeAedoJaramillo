@@ -1,7 +1,7 @@
 #lang scheme
 
 (provide propiedad propiedad? propiedad-get-precio propiedad-get-renta propiedad-get-id propiedad-get-dueño
-          propiedad-esHotel propiedad-estaHipotecada propiedad-get-casas propiedad-get-nombre propiedad-set-dueño propiedad-set-id
+          propiedad-esHotel propiedad-estaHipotecada propiedad-get-casas propiedad-get-nombre propiedad-set-dueño 
           )
 
 ;------CONSTRUCTOR--------
@@ -72,7 +72,10 @@
 ; Rec: dueño (o null)
 ; Tipo de recursión: no aplica
 (define (propiedad-get-dueño prop)
-  (list-ref prop 4)
+  (if (propiedad? prop)
+      (list-ref prop 4)
+      '()
+      )
   )
 
 ; Descripción: Obtiene el numero de casas en la propiedad
@@ -111,11 +114,6 @@
              (propiedad-estaHipotecada prop))
   )
 
-(define (propiedad-set-id prop id)
-  (propiedad id (propiedad-get-nombre prop) (propiedad-get-precio prop)
-             (propiedad-get-renta prop) (propiedad-get-dueño prop) (propiedad-get-casas prop) (propiedad-esHotel prop)
-             (propiedad-estaHipotecada prop))
-  )
 
 ; Descripcion: hipoteca la propiedad
 ; Dom: prop (propiedad)

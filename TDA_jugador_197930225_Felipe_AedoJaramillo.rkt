@@ -1,9 +1,10 @@
 #lang scheme
 
-(require "TDA_propiedad.rkt")
-(provide jugador jugador? jugador-get-id jugador-get-posicion jugador-get-propiedades jugador-get-dinero jugador-estaencarcel jugador-get-cartas
+(require "TDA_propiedad_197930225_Felipe_AedoJaramillo.rkt")
+(provide jugador jugador? jugador-get-id jugador-get-nombre jugador-get-posicion jugador-get-propiedades jugador-get-dinero jugador-estaencarcel jugador-get-cartas
          jugador-comprar-propiedad jugador-comprar-casa jugador-set-posicion jugador-pagar-renta jugador-posee-propiedad? jugador-puede-comprar?
-         jugador-pagar-multa-carcel jugador-switch-carcel jugador-esta-en-bancarrota jugador-gastar-carta)
+         jugador-pagar-multa-carcel jugador-switch-carcel jugador-esta-en-bancarrota jugador-gastar-carta jugador-set-dinero
+         )
 
 ;-----CONSTRUCTOR-----
 ; Descripción: Constructor TDA player
@@ -154,6 +155,7 @@
       )
   )
 
+
 ; Descripción: Agrega una propiedad a la lista de propiedades del jugador
 ; Dom: player(integer) X idPropiedad(integer)
 ; Rec: player (player)
@@ -207,13 +209,19 @@
 ; Dom : pagador(jugador) X receptor(jugador) X monto (int)
 ; rec : lista de players
 (define (jugador-pagar-renta pagador receptor monto)
-  (if (<= (jugador-get-dinero pagador) monto)
+  (if (and (<= (jugador-get-dinero pagador) monto))
       ;bancarrota (no puede-pagar)
+      (begin (display "No eres capaz de pagar la renta, pierdes por bancarrota.\n")
       (list (jugador-set-dinero pagador 0)
-            (jugador-set-dinero receptor (+ (jugador-get-dinero receptor) (- monto (- monto (jugador-get-dinero pagador))))))
+            (jugador-set-dinero receptor (+ (jugador-get-dinero receptor) (- monto (- monto (jugador-get-dinero pagador)))))))
       ;pago realizado
-      (list (jugador-set-dinero pagador (- (jugador-get-dinero pagador) monto))
-            (jugador-set-dinero receptor (+ (jugador-get-dinero receptor) monto)))
+      (if (> (jugador-get-dinero receptor) 0)
+          (begin (display "Te toca pagar renta.\n")
+                 (list (jugador-set-dinero pagador (- (jugador-get-dinero pagador) monto))
+                       (jugador-set-dinero receptor (+ (jugador-get-dinero receptor) monto)))
+                 )
+          (begin (display "Receptor en bancarrota.\n") (list pagador receptor))
+          )
       )
   )
 
@@ -222,7 +230,12 @@
 ; Dom: player (jugador)
 ; Rec: bool
 (define (jugador-esta-en-bancarrota player)
- (<= (jugador-get-dinero player) 0)     
+  (if (<= (jugador-get-dinero player) 0)
+      (begin
+        (display "El jugador ")(display (jugador-get-nombre player))(display " esta en bancarrota.\n") #t)
+      #f
+        
+      )
   )
 
 ;verifica si un jugador posee una propiedad dada
@@ -230,7 +243,7 @@
 ; rec: bool
 (define (jugador-posee-propiedad? player prop)
   (if (propiedad? prop)
-      (ormap (lambda(pr) (= (propiedad-get-id prop) pr)) (jugador-get-propiedades player))
+      (member (propiedad-get-id prop) (jugador-get-propiedades player))
       #f
       )
   )
